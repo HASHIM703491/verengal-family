@@ -1,0 +1,5882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Verengal Family</title>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    :root {
+      --yellow: #f7c600;
+      --yellow-dark: #dca900;
+      --orange: #f28c00;
+      --orange-dark: #d96f00;
+      --bg: #fff9e6;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #777;
+      --green: #159447;
+      --red: #d62828;
+      --blue: #1769aa;
+      --border: #e7e1cf;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    #authScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        linear-gradient(
+          135deg,
+          #fff4bd,
+          #ffd76b,
+          #ffb52e
+        );
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 15px 45px rgba(0,0,0,.15);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand-icon {
+      width: 80px;
+      height: 80px;
+      margin: auto;
+      border-radius: 20px;
+      background: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      font-size: 27px;
+      color: #1d1d1d;
+    }
+
+    .brand p {
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 13px;
+      background: white;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(242,140,0,.12);
+    }
+
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: white;
+    }
+
+    .btn-yellow {
+      background: var(--yellow);
+      color: #222;
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn-light {
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      margin-top: 10px;
+      color: var(--blue);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    #app {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(
+        90deg,
+        var(--yellow),
+        #ffb000
+      );
+      padding: 13px 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.12);
+    }
+
+    .topbar-inner {
+      max-width: 1450px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .top-title {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .role-badge {
+      background: white;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .logout-btn {
+      background: #222;
+      color: white;
+      border: 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1450px;
+      margin: auto;
+      padding: 22px;
+    }
+
+    .page-title {
+      margin-bottom: 5px;
+      font-size: 28px;
+    }
+
+    .page-subtitle {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* =========================
+       MAIN WORKFLOW
+    ========================= */
+
+    .workflow {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .workflow-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .workflow-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .workflow-step {
+      background: #fff8d8;
+      border: 1px solid #f3d36b;
+      border-radius: 12px;
+      padding: 13px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .workflow-step small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* =========================
+       METRICS
+    ========================= */
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .metric {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 17px;
+    }
+
+    .metric-title {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       CARDS
+    ========================= */
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .action-btn {
+      min-height: 70px;
+      border-radius: 14px;
+      border: 1px solid #e5cf7b;
+      background: #fff7d0;
+      font-weight: 800;
+      color: #333;
+    }
+
+    .action-btn:hover {
+      background: #ffe89a;
+    }
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th,
+    td {
+      padding: 11px 9px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #fff6ce;
+      font-weight: 800;
+    }
+
+    tr:hover td {
+      background: #fffdf3;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-paid {
+      background: #dff7e7;
+      color: #08752e;
+    }
+
+    .status-pending {
+      background: #ffe3e3;
+      color: #a51d1d;
+    }
+
+    .status-partial {
+      background: #fff0c2;
+      color: #8b5d00;
+    }
+
+    .status-active {
+      background: #dff7e7;
+      color: #08752e;
+    }
+
+    .status-inactive {
+      background: #eee;
+      color: #777;
+    }
+
+    /* =========================
+       VEHICLE CARDS
+    ========================= */
+
+    .vehicle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .vehicle-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      background: #fffdf4;
+    }
+
+    .vehicle-number {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .vehicle-name {
+      color: var(--muted);
+      margin: 4px 0 12px;
+    }
+
+    .vehicle-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px dashed #ddd;
+      font-size: 13px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 760px;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .close-btn {
+      width: 35px;
+      height: 35px;
+      border: 0;
+      border-radius: 50%;
+      background: #eee;
+      font-size: 20px;
+    }
+
+    .calculation-box {
+      background: #fff8d7;
+      border: 1px solid #efd06b;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .calc-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px dashed #d8c47a;
+    }
+
+    .calc-line:last-child {
+      border-bottom: 0;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .message {
+      padding: 11px 13px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .message.success {
+      display: block;
+      background: #dff7e7;
+      color: #08752e;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffe3e3;
+      color: #a51d1d;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: var(--muted);
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .section-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .nav-btn {
+      border: 0;
+      background: white;
+      border: 1px solid var(--border);
+      padding: 9px 13px;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    .nav-btn.active {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+    }
+
+    .money {
+      font-weight: 800;
+    }
+
+    .positive {
+      color: var(--green);
+    }
+
+    .negative {
+      color: var(--red);
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .inline-actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .metrics {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .vehicle-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .action-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 14px;
+      }
+
+      .topbar {
+        padding: 11px 13px;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+      }
+
+      .top-title {
+        font-size: 16px;
+      }
+
+      .user-info {
+        font-size: 12px;
+      }
+
+      .role-badge {
+        display: none;
+      }
+
+      .workflow-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .vehicle-grid,
+      .action-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 23px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================================
+       LOGIN SCREEN
+  ========================================================== -->
+
+  <section id="authScreen">
+
+    <div class="login-card">
+
+      <div class="brand">
+        <div class="brand-icon">🚛</div>
+
+        <h1>Welcome to the Verengal family</h1>
+
+        <p>Truck & Trip Management</p>
+      </div>
+
+      <div id="authMessage" class="message"></div>
+
+      <div id="loginForm">
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            id="loginEmail"
+            type="email"
+            placeholder="Enter email"
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button
+          class="btn btn-primary btn-block"
+          onclick="login()"
+        >
+          Login
+        </button>
+
+        <span
+          class="forgot"
+          onclick="showForgotPassword()"
+        >
+          Forgot Password?
+        </span>
+
+      </div>
+
+      <div id="forgotForm" class="hidden">
+
+        <div class="form-group">
+          <label>Email</label>
+
+          <input
+            id="forgotEmail"
+            type="email"
+            placeholder="Enter your registered email"
+          />
+        </div>
+
+        <button
+          class="btn btn-primary btn-block"
+          onclick="sendResetEmail()"
+        >
+          Send Reset Link
+        </button>
+
+        <button
+          class="btn btn-light btn-block"
+          style="margin-top:8px"
+          onclick="showLogin()"
+        >
+          Back to Login
+        </button>
+
+      </div>
+
+      <div id="resetForm" class="hidden">
+
+        <div class="form-group">
+          <label>New Password</label>
+
+          <input
+            id="newPassword"
+            type="password"
+            placeholder="Minimum 8 characters"
+          />
+        </div>
+
+        <button
+          class="btn btn-primary btn-block"
+          onclick="updatePassword()"
+        >
+          Update Password
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================================================
+       MAIN APP
+  ========================================================== -->
+
+  <section id="app" class="hidden">
+
+    <header class="topbar">
+
+      <div class="topbar-inner">
+
+        <div class="top-title">
+          🚛 Verengal Family
+        </div>
+
+        <div class="user-info">
+
+          <span id="topUserName"></span>
+
+          <span
+            id="topRole"
+            class="role-badge"
+          ></span>
+
+          <button
+            class="logout-btn"
+            onclick="logout()"
+          >
+            Logout
+          </button>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <main class="container">
+
+      <!-- OWNER APP -->
+      <section id="ownerApp" class="hidden">
+
+        <h1 class="page-title">
+          Owner Dashboard
+        </h1>
+
+        <p class="page-subtitle">
+          Vehicle → Trip → Rent → Expense → Salary → Final Balance
+        </p>
+
+        <div class="workflow">
+
+          <div class="workflow-title">
+            MAIN TRIP WORKFLOW
+          </div>
+
+          <div class="workflow-row">
+
+            <div class="workflow-step">
+              1️⃣ Driver Trip
+              <small>
+                Driver enters trip details
+              </small>
+            </div>
+
+            <div class="workflow-step">
+              2️⃣ Owner Finance
+              <small>
+                Quantity + Rate + Rent
+              </small>
+            </div>
+
+            <div class="workflow-step">
+              3️⃣ Salary
+              <small>
+                Rent × 13%
+              </small>
+            </div>
+
+            <div class="workflow-step">
+              4️⃣ Final Balance
+              <small>
+                Rent − Expenses − Salary
+              </small>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- METRICS -->
+
+        <div class="metrics">
+
+          <div class="metric">
+            <div class="metric-title">
+              Total Trips
+            </div>
+            <div
+              id="metricTrips"
+              class="metric-value"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Total Rent
+            </div>
+            <div
+              id="metricRent"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Total Expenses
+            </div>
+            <div
+              id="metricExpenses"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Salary Pending
+            </div>
+            <div
+              id="metricSalary"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Final Balance
+            </div>
+            <div
+              id="metricBalance"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- MAIN ACTIONS -->
+
+        <div class="action-grid">
+
+          <button
+            class="action-btn"
+            onclick="openModal('driverModal')"
+          >
+            👨‍✈️<br>
+            Add Driver
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="openModal('vehicleModal')"
+          >
+            🚛<br>
+            Add Vehicle
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="openModal('assignmentModal')"
+          >
+            🔗<br>
+            Assign Driver
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="showOwnerSection('history')"
+          >
+            🔎<br>
+            Vehicle History
+          </button>
+
+        </div>
+
+
+        <div class="section-nav">
+
+          <button
+            class="nav-btn active"
+            onclick="showOwnerSection('trips', this)"
+          >
+            Trips
+          </button>
+
+          <button
+            class="nav-btn"
+            onclick="showOwnerSection('vehicles', this)"
+          >
+            Vehicles
+          </button>
+
+          <button
+            class="nav-btn"
+            onclick="showOwnerSection('drivers', this)"
+          >
+            Drivers
+          </button>
+
+          <button
+            class="nav-btn"
+            onclick="showOwnerSection('payments', this)"
+          >
+            Salary Payments
+          </button>
+
+          <button
+            class="nav-btn"
+            onclick="showOwnerSection('history', this)"
+          >
+            Vehicle Search
+          </button>
+
+        </div>
+
+
+        <!-- OWNER TRIPS -->
+
+        <div id="ownerTripsSection">
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                Trip Management
+              </div>
+
+              <button
+                class="btn btn-yellow"
+                onclick="loadAllData()"
+              >
+                ↻ Refresh
+              </button>
+
+            </div>
+
+            <div class="search-row">
+
+              <input
+                id="ownerTripSearch"
+                placeholder="Search vehicle, driver, product, route..."
+                oninput="renderOwnerTrips()"
+              />
+
+              <select
+                id="ownerTripStatusFilter"
+                onchange="renderOwnerTrips()"
+              >
+                <option value="all">
+                  All Trips
+                </option>
+
+                <option value="finance">
+                  Finance Pending
+                </option>
+
+                <option value="salary">
+                  Salary Pending
+                </option>
+
+                <option value="completed">
+                  Completed
+                </option>
+              </select>
+
+            </div>
+
+            <div
+              id="ownerTripsTable"
+              class="table-wrap"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- VEHICLES -->
+
+        <div
+          id="ownerVehiclesSection"
+          class="hidden"
+        >
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                Vehicles
+              </div>
+
+              <button
+                class="btn btn-yellow"
+                onclick="openModal('vehicleModal')"
+              >
+                + Add Vehicle
+              </button>
+
+            </div>
+
+            <div
+              id="vehicleCards"
+              class="vehicle-grid"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- DRIVERS -->
+
+        <div
+          id="ownerDriversSection"
+          class="hidden"
+        >
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                Drivers
+              </div>
+
+              <button
+                class="btn btn-yellow"
+                onclick="openModal('driverModal')"
+              >
+                + Add Driver
+              </button>
+
+            </div>
+
+            <div
+              id="driversTable"
+              class="table-wrap"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- PAYMENTS -->
+
+        <div
+          id="ownerPaymentsSection"
+          class="hidden"
+        >
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                Salary Payment History
+              </div>
+
+            </div>
+
+            <div
+              id="paymentsTable"
+              class="table-wrap"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- HISTORY -->
+
+        <div
+          id="ownerHistorySection"
+          class="hidden"
+        >
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                🔎 Vehicle Complete History
+              </div>
+
+            </div>
+
+            <div class="search-row">
+
+              <select
+                id="historyVehicleSelect"
+                onchange="renderVehicleHistory()"
+              >
+                <option value="">
+                  Select Vehicle
+                </option>
+              </select>
+
+              <input
+                id="historySearch"
+                placeholder="Search driver/product..."
+                oninput="renderVehicleHistory()"
+              />
+
+            </div>
+
+            <div
+              id="vehicleHistoryResult"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- DRIVER APP -->
+
+      <section id="driverApp" class="hidden">
+
+        <h1 class="page-title">
+          Driver Dashboard
+        </h1>
+
+        <p class="page-subtitle">
+          Add your trip details. Owner will add quantity, rate and rent.
+        </p>
+
+
+        <div class="workflow">
+
+          <div class="workflow-title">
+            YOUR WORKFLOW
+          </div>
+
+          <div class="workflow-row">
+
+            <div class="workflow-step">
+              1️⃣ Add Trip
+              <small>
+                Your trip details
+              </small>
+            </div>
+
+            <div class="workflow-step">
+              2️⃣ Owner Finance
+              <small>
+                Owner adds rent
+              </small>
+            </div>
+
+            <div class="workflow-step">
+              3️⃣ Salary
+              <small>
+                13% of rent
+              </small>
+            </div>
+
+            <div class="workflow-step">
+              4️⃣ Payment
+              <small>
+                Paid / Pending
+              </small>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="metrics">
+
+          <div class="metric">
+            <div class="metric-title">
+              My Trips
+            </div>
+
+            <div
+              id="driverTripCount"
+              class="metric-value"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Salary Earned
+            </div>
+
+            <div
+              id="driverSalaryTotal"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Salary Paid
+            </div>
+
+            <div
+              id="driverSalaryPaid"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Salary Pending
+            </div>
+
+            <div
+              id="driverSalaryPending"
+              class="metric-value"
+            >
+              ₹0
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">
+              Active Vehicle
+            </div>
+
+            <div
+              id="driverVehicleCount"
+              class="metric-value"
+            >
+              0
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="action-grid">
+
+          <button
+            class="action-btn"
+            onclick="openDriverTripModal()"
+          >
+            ➕<br>
+            ADD NEW TRIP
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="loadDriverData()"
+          >
+            🔄<br>
+            Refresh
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="showDriverSection('trips')"
+          >
+            📋<br>
+            My Trips
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="showDriverSection('salary')"
+          >
+            💰<br>
+            My Salary
+          </button>
+
+        </div>
+
+
+        <div class="section-nav">
+
+          <button
+            class="nav-btn active"
+            onclick="showDriverSection('trips', this)"
+          >
+            My Trips
+          </button>
+
+          <button
+            class="nav-btn"
+            onclick="showDriverSection('salary', this)"
+          >
+            My Salary
+          </button>
+
+        </div>
+
+
+        <div id="driverTripsSection">
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                My Recent Trips
+              </div>
+
+            </div>
+
+            <div
+              id="driverTripsTable"
+              class="table-wrap"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="driverSalarySection"
+          class="hidden"
+        >
+
+          <div class="card">
+
+            <div class="card-header">
+
+              <div class="card-title">
+                My Salary
+              </div>
+
+            </div>
+
+            <div
+              id="driverSalaryTable"
+              class="table-wrap"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </section>
+
+
+  <!-- =========================================================
+       DRIVER MODAL
+  ========================================================== -->
+
+  <div
+    id="driverModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>Add Driver</h2>
+
+        <button
+          class="close-btn"
+          onclick="closeModal('driverModal')"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="driverMessage" class="message"></div>
+
+      <div class="grid-2">
+
+        <div class="form-group">
+
+          <label>Driver Name *</label>
+
+          <input
+            id="driverName"
+            placeholder="Driver name"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Phone</label>
+
+          <input
+            id="driverPhone"
+            placeholder="Phone number"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Email *</label>
+
+          <input
+            id="driverEmail"
+            type="email"
+            placeholder="driver@example.com"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Password *</label>
+
+          <input
+            id="driverPassword"
+            type="password"
+            placeholder="Minimum 8 characters"
+          />
+
+        </div>
+
+      </div>
+
+      <button
+        class="btn btn-primary"
+        onclick="createDriver()"
+      >
+        Create Driver
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       VEHICLE MODAL
+  ========================================================== -->
+
+  <div
+    id="vehicleModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>Add Vehicle</h2>
+
+        <button
+          class="close-btn"
+          onclick="closeModal('vehicleModal')"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="vehicleMessage" class="message"></div>
+
+      <div class="form-group">
+
+        <label>Vehicle Number *</label>
+
+        <input
+          id="vehicleNumber"
+          placeholder="KL-XX-1234"
+        />
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Vehicle Name</label>
+
+        <input
+          id="vehicleName"
+          placeholder="Truck / Lorry"
+        />
+
+      </div>
+
+      <button
+        class="btn btn-primary"
+        onclick="createVehicle()"
+      >
+        Save Vehicle
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       ASSIGNMENT MODAL
+  ========================================================== -->
+
+  <div
+    id="assignmentModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>Assign Driver to Vehicle</h2>
+
+        <button
+          class="close-btn"
+          onclick="closeModal('assignmentModal')"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="assignmentMessage" class="message"></div>
+
+      <div class="form-group">
+
+        <label>Driver *</label>
+
+        <select id="assignmentDriver"></select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Vehicle *</label>
+
+        <select id="assignmentVehicle"></select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Start Date *</label>
+
+        <input
+          id="assignmentStartDate"
+          type="date"
+        />
+
+      </div>
+
+      <button
+        class="btn btn-primary"
+        onclick="assignDriver()"
+      >
+        Assign Vehicle
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       DRIVER TRIP MODAL
+  ========================================================== -->
+
+  <div
+    id="tripModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>Add New Trip</h2>
+
+        <button
+          class="close-btn"
+          onclick="closeModal('tripModal')"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="tripMessage" class="message"></div>
+
+      <div class="grid-2">
+
+        <div class="form-group">
+
+          <label>Date *</label>
+
+          <input
+            id="tripDate"
+            type="date"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Vehicle *</label>
+
+          <select id="tripVehicle"></select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Product / Load *</label>
+
+          <input
+            id="tripProduct"
+            placeholder="Cement / Sand / etc."
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Load From *</label>
+
+          <input
+            id="tripLoadFrom"
+            placeholder="Loading location"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Unload To *</label>
+
+          <input
+            id="tripUnloadTo"
+            placeholder="Unloading location"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Load Cash Given</label>
+
+          <input
+            id="tripLoadCash"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Unload Amount Received</label>
+
+          <input
+            id="tripUnloadAmount"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Diesel</label>
+
+          <input
+            id="tripDiesel"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Toll</label>
+
+          <input
+            id="tripToll"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Other Expense</label>
+
+          <input
+            id="tripOtherExpense"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Load Cash Narration
+        </label>
+
+        <textarea
+          id="tripLoadCashNarration"
+          placeholder="Details about load cash"
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Unload Narration
+        </label>
+
+        <textarea
+          id="tripUnloadNarration"
+          placeholder="Details about unload amount"
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Trip Narration / Notes
+        </label>
+
+        <textarea
+          id="tripNarration"
+          placeholder="Any additional trip details"
+        ></textarea>
+
+      </div>
+
+
+      <div
+        class="calculation-box"
+        style="margin-bottom:15px"
+      >
+
+        <strong>
+          Driver does NOT enter:
+        </strong>
+
+        <div class="small" style="margin-top:7px">
+          Quantity, Unit, Product Rate and Trip Rent.
+          Owner will add these later.
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn btn-primary"
+        onclick="saveDriverTrip()"
+      >
+        Save Trip
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       OWNER FINANCE MODAL
+  ========================================================== -->
+
+  <div
+    id="financeModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>Complete Trip Finance</h2>
+
+        <button
+          class="close-btn"
+          onclick="closeModal('financeModal')"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="financeMessage" class="message"></div>
+
+      <input
+        id="financeTripId"
+        type="hidden"
+      />
+
+      <div id="financeTripInfo"></div>
+
+      <div class="grid-3">
+
+        <div class="form-group">
+
+          <label>Quantity *</label>
+
+          <input
+            id="financeQuantity"
+            type="number"
+            min="0"
+            step="0.001"
+            oninput="calculateFinancePreview()"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Unit</label>
+
+          <input
+            id="financeUnit"
+            placeholder="Ton / Kg / Load"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Product Rate *</label>
+
+          <input
+            id="financeRate"
+            type="number"
+            min="0"
+            step="0.01"
+            oninput="calculateFinancePreview()"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Trip Rent *</label>
+
+        <input
+          id="financeRent"
+          type="number"
+          min="0"
+          step="0.01"
+          oninput="calculateFinancePreview()"
+        />
+
+      </div>
+
+
+      <div class="calculation-box">
+
+        <div class="calc-line">
+          <span>Load Amount</span>
+          <strong id="calcLoadAmount">₹0</strong>
+        </div>
+
+        <div class="calc-line">
+          <span>Total Expenses</span>
+          <strong id="calcExpenses">₹0</strong>
+        </div>
+
+        <div class="calc-line">
+          <span>Driver Salary (13%)</span>
+          <strong id="calcSalary">₹0</strong>
+        </div>
+
+        <div class="calc-line">
+          <span>Final Balance</span>
+          <strong id="calcFinalBalance">₹0</strong>
+        </div>
+
+      </div>
+
+      <br>
+
+      <button
+        class="btn btn-primary"
+        onclick="saveFinance()"
+      >
+        Save Finance
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       SALARY PAYMENT MODAL
+  ========================================================== -->
+
+  <div
+    id="salaryModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h2>Pay Driver Salary</h2>
+
+        <button
+          class="close-btn"
+          onclick="closeModal('salaryModal')"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="salaryMessage" class="message"></div>
+
+      <input
+        id="salaryTripId"
+        type="hidden"
+      />
+
+      <input
+        id="salaryDriverId"
+        type="hidden"
+      />
+
+      <input
+        id="salaryVehicleId"
+        type="hidden"
+      />
+
+      <div id="salaryInfo"></div>
+
+      <div class="form-group">
+
+        <label>Payment Amount *</label>
+
+        <input
+          id="salaryPaymentAmount"
+          type="number"
+          min="0"
+          step="0.01"
+        />
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Payment Date *</label>
+
+        <input
+          id="salaryPaymentDate"
+          type="date"
+        />
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Payment Note</label>
+
+        <textarea
+          id="salaryPaymentNote"
+          placeholder="Payment details"
+        ></textarea>
+
+      </div>
+
+      <button
+        class="btn btn-green"
+        onclick="saveSalaryPayment()"
+      >
+        Save Payment
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    /* =========================================================
+       SUPABASE CONFIG
+    ========================================================== */
+
+    const SUPABASE_URL =
+      "https://fpekpkxnopkszqvazjkb.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_iEt4MR-8xfZ3f3Pb0WOUbg_oTXaX8Zv";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    /* =========================================================
+       GLOBAL DATA
+    ========================================================== */
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    let allProfiles = [];
+    let allVehicles = [];
+    let allAssignments = [];
+    let allTrips = [];
+    let allPayments = [];
+
+    let driverAssignedVehicles = [];
+
+
+    /* =========================================================
+       HELPERS
+    ========================================================== */
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function money(value) {
+      const number = Number(value || 0);
+
+      return new Intl.NumberFormat(
+        "en-IN",
+        {
+          style: "currency",
+          currency: "INR",
+          maximumFractionDigits: 2
+        }
+      ).format(number);
+    }
+
+    function num(value) {
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
+        return null;
+      }
+
+      const n = Number(value);
+
+      return Number.isFinite(n)
+        ? n
+        : null;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function today() {
+      return new Date()
+        .toISOString()
+        .slice(0, 10);
+    }
+
+    function showMessage(
+      elementId,
+      message,
+      type = "success"
+    ) {
+      const el = $(elementId);
+
+      if (!el) return;
+
+      el.textContent = message;
+      el.className =
+        "message " + type;
+
+      setTimeout(() => {
+        el.className = "message";
+      }, 5000);
+    }
+
+    function showError(error) {
+      console.error(error);
+
+      const message =
+        error?.message ||
+        error?.error_description ||
+        String(error);
+
+      alert(message);
+    }
+
+    function openModal(id) {
+      $(id).classList.remove("hidden");
+
+      if (id === "assignmentModal") {
+        populateAssignmentForm();
+      }
+
+      if (id === "vehicleModal") {
+        $("vehicleNumber").value = "";
+        $("vehicleName").value = "";
+      }
+    }
+
+    function closeModal(id) {
+      $(id).classList.add("hidden");
+    }
+
+    function setLoadingButton(
+      button,
+      loading,
+      normalText
+    ) {
+      if (!button) return;
+
+      button.disabled = loading;
+
+      button.textContent =
+        loading
+          ? "Please wait..."
+          : normalText;
+    }
+
+
+    /* =========================================================
+       AUTH
+    ========================================================== */
+
+    async function login() {
+
+      const email =
+        $("loginEmail").value
+          .trim()
+          .toLowerCase();
+
+      const password =
+        $("loginPassword").value;
+
+      if (!email || !password) {
+        showMessage(
+          "authMessage",
+          "Please enter email and password.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        currentUser =
+          data.user;
+
+        await loadCurrentUser();
+
+      } catch (error) {
+
+        showMessage(
+          "authMessage",
+          error.message,
+          "error"
+        );
+
+      }
+    }
+
+
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+      currentProfile = null;
+
+      $("app").classList.add("hidden");
+      $("authScreen").classList.remove("hidden");
+
+      $("loginPassword").value = "";
+    }
+
+
+    function showForgotPassword() {
+
+      $("loginForm")
+        .classList.add("hidden");
+
+      $("forgotForm")
+        .classList.remove("hidden");
+
+      $("resetForm")
+        .classList.add("hidden");
+
+      $("authMessage").className =
+        "message";
+    }
+
+
+    function showLogin() {
+
+      $("loginForm")
+        .classList.remove("hidden");
+
+      $("forgotForm")
+        .classList.add("hidden");
+
+      $("resetForm")
+        .classList.add("hidden");
+    }
+
+
+    async function sendResetEmail() {
+
+      const email =
+        $("forgotEmail").value
+          .trim()
+          .toLowerCase();
+
+      if (!email) {
+
+        showMessage(
+          "authMessage",
+          "Enter your email.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        const redirectTo =
+          window.location.origin +
+          window.location.pathname;
+
+        const {
+          error
+        } =
+          await supabaseClient.auth
+            .resetPasswordForEmail(
+              email,
+              {
+                redirectTo
+              }
+            );
+
+        if (error) {
+          throw error;
+        }
+
+        showMessage(
+          "authMessage",
+          "Password reset link sent to your email.",
+          "success"
+        );
+
+      } catch (error) {
+
+        showMessage(
+          "authMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    async function updatePassword() {
+
+      const password =
+        $("newPassword").value;
+
+      if (password.length < 8) {
+
+        showMessage(
+          "authMessage",
+          "Password must contain at least 8 characters.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient.auth
+            .updateUser({
+              password
+            });
+
+        if (error) {
+          throw error;
+        }
+
+        showMessage(
+          "authMessage",
+          "Password updated successfully. You can login now.",
+          "success"
+        );
+
+        $("newPassword").value = "";
+
+        setTimeout(
+          showLogin,
+          1500
+        );
+
+      } catch (error) {
+
+        showMessage(
+          "authMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       LOAD CURRENT USER
+    ========================================================== */
+
+    async function loadCurrentUser() {
+
+      const {
+        data: sessionData
+      } =
+        await supabaseClient.auth.getSession();
+
+      if (!sessionData.session) {
+        return;
+      }
+
+      currentUser =
+        sessionData.session.user;
+
+      const {
+        data: profile,
+        error
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select("*")
+          .eq("id", currentUser.id)
+          .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (!profile) {
+        throw new Error(
+          "User profile not found."
+        );
+      }
+
+      if (!profile.is_active) {
+
+        await supabaseClient.auth.signOut();
+
+        throw new Error(
+          "Your account is inactive. Please contact the owner."
+        );
+      }
+
+      currentProfile =
+        profile;
+
+      $("authScreen")
+        .classList.add("hidden");
+
+      $("app")
+        .classList.remove("hidden");
+
+      $("topUserName").textContent =
+        profile.full_name || "User";
+
+      $("topRole").textContent =
+        profile.role.toUpperCase();
+
+      if (profile.role === "owner") {
+
+        $("ownerApp")
+          .classList.remove("hidden");
+
+        $("driverApp")
+          .classList.add("hidden");
+
+        await loadAllData();
+
+      } else {
+
+        $("driverApp")
+          .classList.remove("hidden");
+
+        $("ownerApp")
+          .classList.add("hidden");
+
+        await loadDriverData();
+      }
+    }
+
+
+    /* =========================================================
+       LOAD ALL OWNER DATA
+    ========================================================== */
+
+    async function loadAllData() {
+
+      try {
+
+        const [
+          profilesResult,
+          vehiclesResult,
+          assignmentsResult,
+          tripsResult,
+          paymentsResult
+        ] =
+          await Promise.all([
+
+            supabaseClient
+              .from("profiles")
+              .select("*")
+              .order("created_at", {
+                ascending: false
+              }),
+
+            supabaseClient
+              .from("vehicles")
+              .select("*")
+              .order("vehicle_number"),
+
+            supabaseClient
+              .from("driver_vehicle_assignments")
+              .select("*")
+              .order("start_date", {
+                ascending: false
+              }),
+
+            supabaseClient
+              .from("trips")
+              .select("*")
+              .order("trip_date", {
+                ascending: false
+              })
+              .order("created_at", {
+                ascending: false
+              }),
+
+            supabaseClient
+              .from("salary_payments")
+              .select("*")
+              .order("payment_date", {
+                ascending: false
+              })
+          ]);
+
+        if (profilesResult.error)
+          throw profilesResult.error;
+
+        if (vehiclesResult.error)
+          throw vehiclesResult.error;
+
+        if (assignmentsResult.error)
+          throw assignmentsResult.error;
+
+        if (tripsResult.error)
+          throw tripsResult.error;
+
+        if (paymentsResult.error)
+          throw paymentsResult.error;
+
+        allProfiles =
+          profilesResult.data || [];
+
+        allVehicles =
+          vehiclesResult.data || [];
+
+        allAssignments =
+          assignmentsResult.data || [];
+
+        allTrips =
+          tripsResult.data || [];
+
+        allPayments =
+          paymentsResult.data || [];
+
+        renderOwnerDashboard();
+
+      } catch (error) {
+
+        showError(error);
+      }
+    }
+
+
+    /* =========================================================
+       OWNER DASHBOARD
+    ========================================================== */
+
+    function renderOwnerDashboard() {
+
+      renderOwnerMetrics();
+      renderOwnerTrips();
+      renderVehicles();
+      renderDrivers();
+      renderPayments();
+      populateHistoryVehicleSelect();
+    }
+
+
+    function renderOwnerMetrics() {
+
+      let rent = 0;
+      let expenses = 0;
+      let salary = 0;
+      let paidSalary = 0;
+
+      allTrips.forEach(trip => {
+
+        rent += Number(
+          trip.trip_rent || 0
+        );
+
+        expenses +=
+          Number(trip.diesel || 0) +
+          Number(trip.toll || 0) +
+          Number(trip.other_expense || 0);
+
+        salary += Number(
+          trip.driver_salary || 0
+        );
+      });
+
+      allPayments.forEach(payment => {
+
+        paidSalary += Number(
+          payment.paid_amount || 0
+        );
+      });
+
+      const pending =
+        Math.max(
+          0,
+          salary - paidSalary
+        );
+
+      const finalBalance =
+        rent -
+        expenses -
+        salary;
+
+      $("metricTrips").textContent =
+        allTrips.length;
+
+      $("metricRent").textContent =
+        money(rent);
+
+      $("metricExpenses").textContent =
+        money(expenses);
+
+      $("metricSalary").textContent =
+        money(pending);
+
+      $("metricBalance").textContent =
+        money(finalBalance);
+    }
+
+
+    /* =========================================================
+       OWNER TRIPS
+    ========================================================== */
+
+    function renderOwnerTrips() {
+
+      const container =
+        $("ownerTripsTable");
+
+      const search =
+        (
+          $("ownerTripSearch")?.value ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const status =
+        $("ownerTripStatusFilter")
+          ?.value || "all";
+
+      let trips =
+        [...allTrips];
+
+      trips =
+        trips.filter(trip => {
+
+          const vehicle =
+            findVehicle(
+              trip.vehicle_id
+            );
+
+          const driver =
+            findProfile(
+              trip.driver_id
+            );
+
+          const text = [
+            vehicle?.vehicle_number,
+            driver?.full_name,
+            trip.product,
+            trip.load_from,
+            trip.unload_to
+          ]
+            .join(" ")
+            .toLowerCase();
+
+          if (
+            search &&
+            !text.includes(search)
+          ) {
+            return false;
+          }
+
+          const financePending =
+            trip.quantity == null ||
+            trip.product_rate == null ||
+            trip.trip_rent == null;
+
+          const salaryDue =
+            getTripSalaryDue(trip.id);
+
+          if (
+            status === "finance" &&
+            !financePending
+          ) {
+            return false;
+          }
+
+          if (
+            status === "salary" &&
+            (
+              financePending ||
+              salaryDue <= 0
+            )
+          ) {
+            return false;
+          }
+
+          if (
+            status === "completed" &&
+            (
+              financePending ||
+              salaryDue > 0
+            )
+          ) {
+            return false;
+          }
+
+          return true;
+        });
+
+      if (!trips.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+            No trips found.
+          </div>`;
+
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vehicle</th>
+              <th>Driver</th>
+              <th>Product</th>
+              <th>Route</th>
+              <th>Rent</th>
+              <th>Expenses</th>
+              <th>Salary</th>
+              <th>Final Balance</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      trips.forEach(trip => {
+
+        const vehicle =
+          findVehicle(
+            trip.vehicle_id
+          );
+
+        const driver =
+          findProfile(
+            trip.driver_id
+          );
+
+        const expenses =
+          Number(trip.diesel || 0) +
+          Number(trip.toll || 0) +
+          Number(trip.other_expense || 0);
+
+        const financePending =
+          trip.quantity == null ||
+          trip.product_rate == null ||
+          trip.trip_rent == null;
+
+        const salary =
+          Number(
+            trip.driver_salary || 0
+          );
+
+        const salaryDue =
+          getTripSalaryDue(trip.id);
+
+        let statusHtml = "";
+
+        if (financePending) {
+
+          statusHtml =
+            `<span class="status status-pending">
+              FINANCE PENDING
+            </span>`;
+
+        } else if (salaryDue > 0) {
+
+          statusHtml =
+            `<span class="status status-partial">
+              SALARY ₹${salaryDue.toFixed(2)}
+            </span>`;
+
+        } else {
+
+          statusHtml =
+            `<span class="status status-paid">
+              COMPLETED
+            </span>`;
+        }
+
+        let action = "";
+
+        if (financePending) {
+
+          action += `
+            <button
+              class="btn btn-yellow"
+              onclick="openFinanceModal('${trip.id}')"
+            >
+              Add Rate & Rent
+            </button>
+          `;
+
+        } else if (salaryDue > 0) {
+
+          action += `
+            <button
+              class="btn btn-green"
+              onclick="openSalaryModal('${trip.id}')"
+            >
+              Pay Salary
+            </button>
+          `;
+
+        } else {
+
+          action =
+            `<span class="small">
+              No action needed
+            </span>`;
+        }
+
+        html += `
+          <tr>
+
+            <td>
+              ${escapeHtml(trip.trip_date || "-")}
+            </td>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  vehicle?.vehicle_number || "-"
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                driver?.full_name || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.product || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.load_from || "-"
+              )}
+              →
+              ${escapeHtml(
+                trip.unload_to || "-"
+              )}
+            </td>
+
+            <td class="money">
+              ${money(trip.trip_rent)}
+            </td>
+
+            <td class="money">
+              ${money(expenses)}
+            </td>
+
+            <td class="money">
+              ${money(salary)}
+            </td>
+
+            <td class="money">
+              ${money(trip.final_balance)}
+            </td>
+
+            <td>
+              ${statusHtml}
+            </td>
+
+            <td>
+              <div class="inline-actions">
+                ${action}
+              </div>
+            </td>
+
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      container.innerHTML =
+        html;
+    }
+
+
+    /* =========================================================
+       CREATE DRIVER
+    ========================================================== */
+
+    async function createDriver() {
+
+      const name =
+        $("driverName").value.trim();
+
+      const phone =
+        $("driverPhone").value.trim();
+
+      const email =
+        $("driverEmail").value
+          .trim()
+          .toLowerCase();
+
+      const password =
+        $("driverPassword").value;
+
+      if (!name) {
+
+        showMessage(
+          "driverMessage",
+          "Driver name is required.",
+          "error"
+        );
+
+        return;
+      }
+
+      if (!email) {
+
+        showMessage(
+          "driverMessage",
+          "Driver email is required.",
+          "error"
+        );
+
+        return;
+      }
+
+      if (password.length < 8) {
+
+        showMessage(
+          "driverMessage",
+          "Password must contain at least 8 characters.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        const {
+          data: sessionData
+        } =
+          await supabaseClient.auth.getSession();
+
+        const accessToken =
+          sessionData.session?.access_token;
+
+        if (!accessToken) {
+          throw new Error(
+            "Your login session has expired."
+          );
+        }
+
+        const response =
+          await fetch(
+            SUPABASE_URL +
+            "/functions/v1/create-driver",
+            {
+              method: "POST",
+
+              headers: {
+                "Authorization":
+                  `Bearer ${accessToken}`,
+
+                "apikey":
+                  SUPABASE_ANON_KEY,
+
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                name,
+                phone,
+                email,
+                password
+              })
+            }
+          );
+
+        const result =
+          await response.json();
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            result.message ||
+            "Driver creation failed."
+          );
+        }
+
+        showMessage(
+          "driverMessage",
+          "Driver created successfully.",
+          "success"
+        );
+
+        $("driverName").value = "";
+        $("driverPhone").value = "";
+        $("driverEmail").value = "";
+        $("driverPassword").value = "";
+
+        await loadAllData();
+
+      } catch (error) {
+
+        showMessage(
+          "driverMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       CREATE VEHICLE
+    ========================================================== */
+
+    async function createVehicle() {
+
+      const vehicleNumber =
+        $("vehicleNumber").value
+          .trim()
+          .toUpperCase();
+
+      const vehicleName =
+        $("vehicleName").value
+          .trim();
+
+      if (!vehicleNumber) {
+
+        showMessage(
+          "vehicleMessage",
+          "Vehicle number is required.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("vehicles")
+            .insert({
+              vehicle_number:
+                vehicleNumber,
+
+              vehicle_name:
+                vehicleName || null,
+
+              is_active:
+                true
+            })
+            .select()
+            .single();
+
+        if (error) {
+          throw error;
+        }
+
+        showMessage(
+          "vehicleMessage",
+          "Vehicle created successfully.",
+          "success"
+        );
+
+        await loadAllData();
+
+        setTimeout(() => {
+          closeModal("vehicleModal");
+        }, 700);
+
+      } catch (error) {
+
+        showMessage(
+          "vehicleMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       ASSIGN DRIVER
+    ========================================================== */
+
+    function populateAssignmentForm() {
+
+      const driverSelect =
+        $("assignmentDriver");
+
+      const vehicleSelect =
+        $("assignmentVehicle");
+
+      const drivers =
+        allProfiles.filter(
+          p =>
+            p.role === "driver" &&
+            p.is_active === true
+        );
+
+      const vehicles =
+        allVehicles.filter(
+          v =>
+            v.is_active === true
+        );
+
+      driverSelect.innerHTML =
+        `<option value="">
+          Select Driver
+        </option>` +
+        drivers
+          .map(
+            d =>
+              `<option value="${d.id}">
+                ${escapeHtml(d.full_name)}
+              </option>`
+          )
+          .join("");
+
+      vehicleSelect.innerHTML =
+        `<option value="">
+          Select Vehicle
+        </option>` +
+        vehicles
+          .map(
+            v =>
+              `<option value="${v.id}">
+                ${escapeHtml(v.vehicle_number)}
+              </option>`
+          )
+          .join("");
+
+      $("assignmentStartDate").value =
+        today();
+    }
+
+
+    async function assignDriver() {
+
+      const driverId =
+        $("assignmentDriver").value;
+
+      const vehicleId =
+        $("assignmentVehicle").value;
+
+      const startDate =
+        $("assignmentStartDate").value;
+
+      if (
+        !driverId ||
+        !vehicleId ||
+        !startDate
+      ) {
+
+        showMessage(
+          "assignmentMessage",
+          "Please fill all required fields.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        /*
+          First close any current assignment
+          for this driver + vehicle.
+        */
+
+        const todayDate =
+          today();
+
+        const existing =
+          allAssignments.filter(
+            a =>
+              a.driver_id === driverId &&
+              a.vehicle_id === vehicleId &&
+              !a.end_date
+          );
+
+        for (const assignment of existing) {
+
+          const {
+            error
+          } =
+            await supabaseClient
+              .from(
+                "driver_vehicle_assignments"
+              )
+              .update({
+                end_date: todayDate
+              })
+              .eq(
+                "id",
+                assignment.id
+              );
+
+          if (error) {
+            throw error;
+          }
+        }
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from(
+              "driver_vehicle_assignments"
+            )
+            .insert({
+              driver_id: driverId,
+              vehicle_id: vehicleId,
+              start_date: startDate,
+              end_date: null
+            });
+
+        if (error) {
+          throw error;
+        }
+
+        showMessage(
+          "assignmentMessage",
+          "Driver assigned successfully.",
+          "success"
+        );
+
+        await loadAllData();
+
+        setTimeout(() => {
+          closeModal("assignmentModal");
+        }, 700);
+
+      } catch (error) {
+
+        showMessage(
+          "assignmentMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       DRIVER DATA
+    ========================================================== */
+
+    async function loadDriverData() {
+
+      try {
+
+        const [
+          vehiclesResult,
+          assignmentsResult,
+          tripsResult,
+          paymentsResult
+        ] =
+          await Promise.all([
+
+            supabaseClient
+              .from("vehicles")
+              .select("*")
+              .order("vehicle_number"),
+
+            supabaseClient
+              .from("driver_vehicle_assignments")
+              .select("*")
+              .eq(
+                "driver_id",
+                currentUser.id
+              )
+              .order("start_date", {
+                ascending: false
+              }),
+
+            supabaseClient
+              .from("trips")
+              .select("*")
+              .eq(
+                "driver_id",
+                currentUser.id
+              )
+              .order("trip_date", {
+                ascending: false
+              })
+              .order("created_at", {
+                ascending: false
+              }),
+
+            supabaseClient
+              .from("salary_payments")
+              .select("*")
+              .eq(
+                "driver_id",
+                currentUser.id
+              )
+              .order("payment_date", {
+                ascending: false
+              })
+          ]);
+
+        if (vehiclesResult.error)
+          throw vehiclesResult.error;
+
+        if (assignmentsResult.error)
+          throw assignmentsResult.error;
+
+        if (tripsResult.error)
+          throw tripsResult.error;
+
+        if (paymentsResult.error)
+          throw paymentsResult.error;
+
+        allVehicles =
+          vehiclesResult.data || [];
+
+        allAssignments =
+          assignmentsResult.data || [];
+
+        allTrips =
+          tripsResult.data || [];
+
+        allPayments =
+          paymentsResult.data || [];
+
+        driverAssignedVehicles =
+          getCurrentDriverVehicles();
+
+        renderDriverDashboard();
+
+      } catch (error) {
+
+        showError(error);
+      }
+    }
+
+
+    function getCurrentDriverVehicles() {
+
+      const currentDate =
+        today();
+
+      const activeAssignments =
+        allAssignments.filter(
+          a =>
+            a.start_date <= currentDate &&
+            (
+              !a.end_date ||
+              a.end_date >= currentDate
+            )
+        );
+
+      const vehicleIds =
+        [
+          ...new Set(
+            activeAssignments.map(
+              a => a.vehicle_id
+            )
+          )
+        ];
+
+      return allVehicles.filter(
+        v =>
+          v.is_active &&
+          vehicleIds.includes(v.id)
+      );
+    }
+
+
+    function renderDriverDashboard() {
+
+      let salaryTotal = 0;
+      let paidTotal = 0;
+
+      allTrips.forEach(
+        trip => {
+          salaryTotal += Number(
+            trip.driver_salary || 0
+          );
+        }
+      );
+
+      allPayments.forEach(
+        payment => {
+          paidTotal += Number(
+            payment.paid_amount || 0
+          );
+        }
+      );
+
+      const pending =
+        Math.max(
+          0,
+          salaryTotal - paidTotal
+        );
+
+      $("driverTripCount")
+        .textContent =
+        allTrips.length;
+
+      $("driverSalaryTotal")
+        .textContent =
+        money(salaryTotal);
+
+      $("driverSalaryPaid")
+        .textContent =
+        money(paidTotal);
+
+      $("driverSalaryPending")
+        .textContent =
+        money(pending);
+
+      $("driverVehicleCount")
+        .textContent =
+        driverAssignedVehicles.length;
+
+      renderDriverTrips();
+      renderDriverSalary();
+    }
+
+
+    /* =========================================================
+       OPEN DRIVER TRIP
+    ========================================================== */
+
+    function openDriverTripModal() {
+
+      if (
+        !driverAssignedVehicles.length
+      ) {
+
+        alert(
+          "No active vehicle is assigned to you. Please contact the owner."
+        );
+
+        return;
+      }
+
+      $("tripDate").value =
+        today();
+
+      $("tripVehicle").innerHTML =
+        `<option value="">
+          Select Vehicle
+        </option>` +
+        driverAssignedVehicles
+          .map(
+            vehicle =>
+              `<option value="${vehicle.id}">
+                ${escapeHtml(
+                  vehicle.vehicle_number
+                )}
+                ${vehicle.vehicle_name
+                  ? " - " +
+                    escapeHtml(
+                      vehicle.vehicle_name
+                    )
+                  : ""}
+              </option>`
+          )
+          .join("");
+
+      $("tripProduct").value = "";
+      $("tripLoadFrom").value = "";
+      $("tripUnloadTo").value = "";
+      $("tripLoadCash").value = "";
+      $("tripUnloadAmount").value = "";
+      $("tripDiesel").value = "";
+      $("tripToll").value = "";
+      $("tripOtherExpense").value = "";
+      $("tripLoadCashNarration").value = "";
+      $("tripUnloadNarration").value = "";
+      $("tripNarration").value = "";
+
+      openModal("tripModal");
+    }
+
+
+    /* =========================================================
+       DRIVER TRIP SAVE
+       
+       IMPORTANT:
+       DO NOT INSERT:
+       - load_amount
+       - driver_salary
+       - final_balance
+       
+       These are generated/calculated database values.
+    ========================================================== */
+
+    async function saveDriverTrip() {
+
+      const tripDate =
+        $("tripDate").value;
+
+      const vehicleId =
+        $("tripVehicle").value;
+
+      const product =
+        $("tripProduct").value.trim();
+
+      const loadFrom =
+        $("tripLoadFrom").value.trim();
+
+      const unloadTo =
+        $("tripUnloadTo").value.trim();
+
+      if (
+        !tripDate ||
+        !vehicleId ||
+        !product ||
+        !loadFrom ||
+        !unloadTo
+      ) {
+
+        showMessage(
+          "tripMessage",
+          "Please fill Date, Vehicle, Product, Load From and Unload To.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      /*
+        Verify that this vehicle is actually assigned
+        to the logged-in driver.
+
+        This is an extra frontend check.
+        RLS also protects the INSERT in Supabase.
+      */
+
+      const allowed =
+        driverAssignedVehicles.some(
+          v => v.id === vehicleId
+        );
+
+      if (!allowed) {
+
+        showMessage(
+          "tripMessage",
+          "This vehicle is not assigned to you.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      try {
+
+        /*
+          IMPORTANT:
+          Only normal input columns are inserted here.
+
+          We deliberately DO NOT include:
+          load_amount
+          driver_salary
+          final_balance
+        */
+
+        const tripData = {
+
+          trip_date:
+            tripDate,
+
+          vehicle_id:
+            vehicleId,
+
+          driver_id:
+            currentUser.id,
+
+          product:
+            product,
+
+          load_from:
+            loadFrom,
+
+          unload_to:
+            unloadTo,
+
+          load_cash:
+            num(
+              $("tripLoadCash").value
+            ),
+
+          load_cash_narration:
+            $("tripLoadCashNarration")
+              .value
+              .trim() || null,
+
+          unload_amount_received:
+            num(
+              $("tripUnloadAmount").value
+            ),
+
+          unload_narration:
+            $("tripUnloadNarration")
+              .value
+              .trim() || null,
+
+          diesel:
+            num(
+              $("tripDiesel").value
+            ) ?? 0,
+
+          toll:
+            num(
+              $("tripToll").value
+            ) ?? 0,
+
+          other_expense:
+            num(
+              $("tripOtherExpense").value
+            ) ?? 0,
+
+          trip_narration:
+            $("tripNarration")
+              .value
+              .trim() || null
+
+          /*
+            DO NOT ADD:
+            quantity
+            unit
+            product_rate
+            trip_rent
+            load_amount
+            driver_salary
+            final_balance
+          */
+        };
+
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("trips")
+            .insert(tripData)
+            .select()
+            .single();
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        showMessage(
+          "tripMessage",
+          "Trip saved successfully.",
+          "success"
+        );
+
+
+        await loadDriverData();
+
+
+        setTimeout(() => {
+
+          closeModal("tripModal");
+
+        }, 800);
+
+
+      } catch (error) {
+
+        console.error(
+          "DRIVER TRIP INSERT ERROR:",
+          error
+        );
+
+        showMessage(
+          "tripMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       DRIVER TRIPS
+    ========================================================== */
+
+    function renderDriverTrips() {
+
+      const container =
+        $("driverTripsTable");
+
+      if (!allTrips.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+            No trips added yet.
+          </div>`;
+
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vehicle</th>
+              <th>Product</th>
+              <th>Route</th>
+              <th>Rent</th>
+              <th>Salary</th>
+              <th>Salary Status</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      allTrips.forEach(trip => {
+
+        const vehicle =
+          findVehicle(
+            trip.vehicle_id
+          );
+
+        const due =
+          getTripSalaryDue(
+            trip.id
+          );
+
+        let status;
+
+        if (
+          Number(trip.driver_salary || 0) === 0
+        ) {
+
+          status =
+            `<span class="status status-pending">
+              RENT PENDING
+            </span>`;
+
+        } else if (due > 0) {
+
+          status =
+            `<span class="status status-pending">
+              PENDING ${money(due)}
+            </span>`;
+
+        } else {
+
+          status =
+            `<span class="status status-paid">
+              PAID
+            </span>`;
+        }
+
+        html += `
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                trip.trip_date || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                vehicle?.vehicle_number || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.product || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.load_from || "-"
+              )}
+              →
+              ${escapeHtml(
+                trip.unload_to || "-"
+              )}
+            </td>
+
+            <td class="money">
+              ${money(trip.trip_rent)}
+            </td>
+
+            <td class="money">
+              ${money(trip.driver_salary)}
+            </td>
+
+            <td>
+              ${status}
+            </td>
+
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      container.innerHTML =
+        html;
+    }
+
+
+    /* =========================================================
+       DRIVER SALARY
+    ========================================================== */
+
+    function renderDriverSalary() {
+
+      const container =
+        $("driverSalaryTable");
+
+      const salaryTrips =
+        allTrips.filter(
+          trip =>
+            Number(
+              trip.driver_salary || 0
+            ) > 0
+        );
+
+      if (!salaryTrips.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+            Salary will appear here after owner adds trip rent.
+          </div>`;
+
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vehicle</th>
+              <th>Rent</th>
+              <th>Salary 13%</th>
+              <th>Paid</th>
+              <th>Pending</th>
+              <th>Status</th>
+              <th>Payment Date</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      salaryTrips.forEach(trip => {
+
+        const vehicle =
+          findVehicle(
+            trip.vehicle_id
+          );
+
+        const paid =
+          getTripPaidAmount(
+            trip.id
+          );
+
+        const salary =
+          Number(
+            trip.driver_salary || 0
+          );
+
+        const pending =
+          Math.max(
+            0,
+            salary - paid
+          );
+
+        const latestPayment =
+          getLatestPayment(
+            trip.id
+          );
+
+        html += `
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                trip.trip_date || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                vehicle?.vehicle_number || "-"
+              )}
+            </td>
+
+            <td class="money">
+              ${money(trip.trip_rent)}
+            </td>
+
+            <td class="money">
+              ${money(salary)}
+            </td>
+
+            <td class="money">
+              ${money(paid)}
+            </td>
+
+            <td class="money">
+              ${money(pending)}
+            </td>
+
+            <td>
+              ${
+                pending <= 0
+                  ? `<span class="status status-paid">PAID</span>`
+                  : `<span class="status status-pending">PENDING</span>`
+              }
+            </td>
+
+            <td>
+              ${escapeHtml(
+                latestPayment?.payment_date || "-"
+              )}
+            </td>
+
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      container.innerHTML =
+        html;
+    }
+
+
+    /* =========================================================
+       OWNER FINANCE
+    ========================================================== */
+
+    function openFinanceModal(tripId) {
+
+      const trip =
+        allTrips.find(
+          t => t.id === tripId
+        );
+
+      if (!trip) {
+        alert("Trip not found.");
+        return;
+      }
+
+      $("financeTripId").value =
+        tripId;
+
+      $("financeQuantity").value =
+        trip.quantity ?? "";
+
+      $("financeUnit").value =
+        trip.unit ?? "";
+
+      $("financeRate").value =
+        trip.product_rate ?? "";
+
+      $("financeRent").value =
+        trip.trip_rent ?? "";
+
+      const vehicle =
+        findVehicle(
+          trip.vehicle_id
+        );
+
+      const driver =
+        findProfile(
+          trip.driver_id
+        );
+
+      const expenses =
+        Number(trip.diesel || 0) +
+        Number(trip.toll || 0) +
+        Number(trip.other_expense || 0);
+
+      $("financeTripInfo").innerHTML =
+        `
+          <div class="calculation-box" style="margin-bottom:15px">
+
+            <strong>
+              ${escapeHtml(
+                vehicle?.vehicle_number || "-"
+              )}
+              -
+              ${escapeHtml(
+                driver?.full_name || "-"
+              )}
+            </strong>
+
+            <div class="small" style="margin-top:5px">
+              ${escapeHtml(
+                trip.product || "-"
+              )}
+              |
+              ${escapeHtml(
+                trip.load_from || "-"
+              )}
+              →
+              ${escapeHtml(
+                trip.unload_to || "-"
+              )}
+            </div>
+
+            <div class="small" style="margin-top:5px">
+              Current Expenses:
+              ${money(expenses)}
+            </div>
+
+          </div>
+        `;
+
+      calculateFinancePreview();
+
+      openModal("financeModal");
+    }
+
+
+    function calculateFinancePreview() {
+
+      const quantity =
+        Number(
+          $("financeQuantity").value || 0
+        );
+
+      const rate =
+        Number(
+          $("financeRate").value || 0
+        );
+
+      const rent =
+        Number(
+          $("financeRent").value || 0
+        );
+
+      const tripId =
+        $("financeTripId").value;
+
+      const trip =
+        allTrips.find(
+          t => t.id === tripId
+        );
+
+      const expenses =
+        trip
+          ? Number(trip.diesel || 0) +
+            Number(trip.toll || 0) +
+            Number(trip.other_expense || 0)
+          : 0;
+
+      const loadAmount =
+        quantity * rate;
+
+      const salary =
+        rent * 0.13;
+
+      const finalBalance =
+        rent -
+        expenses -
+        salary;
+
+      $("calcLoadAmount")
+        .textContent =
+        money(loadAmount);
+
+      $("calcExpenses")
+        .textContent =
+        money(expenses);
+
+      $("calcSalary")
+        .textContent =
+        money(salary);
+
+      $("calcFinalBalance")
+        .textContent =
+        money(finalBalance);
+    }
+
+
+    async function saveFinance() {
+
+      const tripId =
+        $("financeTripId").value;
+
+      const quantity =
+        num(
+          $("financeQuantity").value
+        );
+
+      const unit =
+        $("financeUnit").value
+          .trim() || null;
+
+      const productRate =
+        num(
+          $("financeRate").value
+        );
+
+      const tripRent =
+        num(
+          $("financeRent").value
+        );
+
+      if (
+        quantity === null ||
+        productRate === null ||
+        tripRent === null
+      ) {
+
+        showMessage(
+          "financeMessage",
+          "Quantity, Product Rate and Trip Rent are required.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      try {
+
+        /*
+          IMPORTANT:
+          We update ONLY input columns.
+
+          DO NOT update:
+          load_amount
+          driver_salary
+          final_balance
+
+          Database calculates those.
+        */
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("trips")
+            .update({
+
+              quantity:
+                quantity,
+
+              unit:
+                unit,
+
+              product_rate:
+                productRate,
+
+              trip_rent:
+                tripRent
+
+            })
+            .eq(
+              "id",
+              tripId
+            );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        showMessage(
+          "financeMessage",
+          "Finance saved successfully. Calculations updated automatically.",
+          "success"
+        );
+
+
+        await loadAllData();
+
+
+        setTimeout(() => {
+
+          closeModal(
+            "financeModal"
+          );
+
+        }, 800);
+
+
+      } catch (error) {
+
+        showMessage(
+          "financeMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       SALARY PAYMENT
+    ========================================================== */
+
+    function openSalaryModal(tripId) {
+
+      const trip =
+        allTrips.find(
+          t => t.id === tripId
+        );
+
+      if (!trip) {
+        alert("Trip not found.");
+        return;
+      }
+
+      const salary =
+        Number(
+          trip.driver_salary || 0
+        );
+
+      const paid =
+        getTripPaidAmount(
+          tripId
+        );
+
+      const due =
+        Math.max(
+          0,
+          salary - paid
+        );
+
+      if (due <= 0) {
+
+        alert(
+          "This salary is already fully paid."
+        );
+
+        return;
+      }
+
+      const driver =
+        findProfile(
+          trip.driver_id
+        );
+
+      const vehicle =
+        findVehicle(
+          trip.vehicle_id
+        );
+
+      $("salaryTripId").value =
+        trip.id;
+
+      $("salaryDriverId").value =
+        trip.driver_id;
+
+      $("salaryVehicleId").value =
+        trip.vehicle_id;
+
+      $("salaryPaymentAmount").value =
+        due.toFixed(2);
+
+      $("salaryPaymentDate").value =
+        today();
+
+      $("salaryPaymentNote").value =
+        "";
+
+      $("salaryInfo").innerHTML =
+        `
+          <div class="calculation-box" style="margin-bottom:15px">
+
+            <div class="calc-line">
+              <span>Driver</span>
+              <strong>
+                ${escapeHtml(
+                  driver?.full_name || "-"
+                )}
+              </strong>
+            </div>
+
+            <div class="calc-line">
+              <span>Vehicle</span>
+              <strong>
+                ${escapeHtml(
+                  vehicle?.vehicle_number || "-"
+                )}
+              </strong>
+            </div>
+
+            <div class="calc-line">
+              <span>Total Salary</span>
+              <strong>
+                ${money(salary)}
+              </strong>
+            </div>
+
+            <div class="calc-line">
+              <span>Already Paid</span>
+              <strong>
+                ${money(paid)}
+              </strong>
+            </div>
+
+            <div class="calc-line">
+              <span>Pending</span>
+              <strong>
+                ${money(due)}
+              </strong>
+            </div>
+
+          </div>
+        `;
+
+      openModal("salaryModal");
+    }
+
+
+    async function saveSalaryPayment() {
+
+      const tripId =
+        $("salaryTripId").value;
+
+      const driverId =
+        $("salaryDriverId").value;
+
+      const vehicleId =
+        $("salaryVehicleId").value;
+
+      const amount =
+        num(
+          $("salaryPaymentAmount").value
+        );
+
+      const paymentDate =
+        $("salaryPaymentDate").value;
+
+      const note =
+        $("salaryPaymentNote")
+          .value
+          .trim() || null;
+
+      if (
+        !tripId ||
+        !driverId ||
+        !vehicleId ||
+        amount === null ||
+        amount <= 0 ||
+        !paymentDate
+      ) {
+
+        showMessage(
+          "salaryMessage",
+          "Please enter a valid payment amount and date.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      const trip =
+        allTrips.find(
+          t => t.id === tripId
+        );
+
+      if (!trip) {
+
+        showMessage(
+          "salaryMessage",
+          "Trip not found.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      const salary =
+        Number(
+          trip.driver_salary || 0
+        );
+
+      const alreadyPaid =
+        getTripPaidAmount(
+          tripId
+        );
+
+      const pending =
+        Math.max(
+          0,
+          salary - alreadyPaid
+        );
+
+
+      if (amount > pending + 0.01) {
+
+        showMessage(
+          "salaryMessage",
+          `Maximum payment allowed is ${money(pending)}.`,
+          "error"
+        );
+
+        return;
+      }
+
+
+      const newTotalPaid =
+        alreadyPaid + amount;
+
+      const status =
+        newTotalPaid >=
+        salary - 0.01
+          ? "paid"
+          : "partial";
+
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("salary_payments")
+            .insert({
+
+              trip_id:
+                tripId,
+
+              driver_id:
+                driverId,
+
+              vehicle_id:
+                vehicleId,
+
+              salary_amount:
+                salary,
+
+              paid_amount:
+                amount,
+
+              status:
+                status,
+
+              payment_date:
+                paymentDate,
+
+              payment_note:
+                note,
+
+              paid_by:
+                currentUser.id
+            });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        showMessage(
+          "salaryMessage",
+          "Salary payment saved successfully.",
+          "success"
+        );
+
+
+        await loadAllData();
+
+
+        setTimeout(() => {
+
+          closeModal(
+            "salaryModal"
+          );
+
+        }, 800);
+
+
+      } catch (error) {
+
+        showMessage(
+          "salaryMessage",
+          error.message,
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       VEHICLES
+    ========================================================== */
+
+    function renderVehicles() {
+
+      const container =
+        $("vehicleCards");
+
+      if (!allVehicles.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+            No vehicles found.
+          </div>`;
+
+        return;
+      }
+
+      container.innerHTML =
+        allVehicles
+          .map(vehicle => {
+
+            const assignments =
+              allAssignments.filter(
+                a =>
+                  a.vehicle_id ===
+                  vehicle.id
+              );
+
+            const currentAssignment =
+              assignments.find(
+                a =>
+                  !a.end_date &&
+                  a.start_date <= today()
+              );
+
+            const driver =
+              currentAssignment
+                ? findProfile(
+                    currentAssignment.driver_id
+                  )
+                : null;
+
+            const tripCount =
+              allTrips.filter(
+                t =>
+                  t.vehicle_id ===
+                  vehicle.id
+              ).length;
+
+            return `
+              <div class="vehicle-card">
+
+                <div class="vehicle-number">
+                  ${escapeHtml(
+                    vehicle.vehicle_number
+                  )}
+                </div>
+
+                <div class="vehicle-name">
+                  ${escapeHtml(
+                    vehicle.vehicle_name || "Truck"
+                  )}
+                </div>
+
+                <div class="vehicle-line">
+                  <span>Driver</span>
+                  <strong>
+                    ${escapeHtml(
+                      driver?.full_name ||
+                      "Not assigned"
+                    )}
+                  </strong>
+                </div>
+
+                <div class="vehicle-line">
+                  <span>Total Trips</span>
+                  <strong>
+                    ${tripCount}
+                  </strong>
+                </div>
+
+                <div
+                  style="margin-top:12px"
+                  class="inline-actions"
+                >
+
+                  <button
+                    class="btn btn-yellow"
+                    onclick="selectHistoryVehicle('${vehicle.id}')"
+                  >
+                    View History
+                  </button>
+
+                  ${
+                    vehicle.is_active
+                      ? `
+                        <button
+                          class="btn btn-red"
+                          onclick="deactivateVehicle('${vehicle.id}')"
+                        >
+                          Deactivate
+                        </button>
+                      `
+                      : `
+                        <button
+                          class="btn btn-green"
+                          onclick="activateVehicle('${vehicle.id}')"
+                        >
+                          Activate
+                        </button>
+                      `
+                  }
+
+                </div>
+
+              </div>
+            `;
+          })
+          .join("");
+    }
+
+
+    async function deactivateVehicle(
+      vehicleId
+    ) {
+
+      if (
+        !confirm(
+          "Deactivate this vehicle? Old trip history will remain."
+        )
+      ) {
+        return;
+      }
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("vehicles")
+            .update({
+              is_active: false
+            })
+            .eq(
+              "id",
+              vehicleId
+            );
+
+        if (error) {
+          throw error;
+        }
+
+        await loadAllData();
+
+      } catch (error) {
+
+        showError(error);
+      }
+    }
+
+
+    async function activateVehicle(
+      vehicleId
+    ) {
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("vehicles")
+            .update({
+              is_active: true
+            })
+            .eq(
+              "id",
+              vehicleId
+            );
+
+        if (error) {
+          throw error;
+        }
+
+        await loadAllData();
+
+      } catch (error) {
+
+        showError(error);
+      }
+    }
+
+
+    /* =========================================================
+       DRIVERS
+    ========================================================== */
+
+    function renderDrivers() {
+
+      const container =
+        $("driversTable");
+
+      const drivers =
+        allProfiles.filter(
+          p =>
+            p.role === "driver"
+        );
+
+      if (!drivers.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+            No drivers found.
+          </div>`;
+
+        return;
+      }
+
+      let html = `
+        <table>
+
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Current Vehicle</th>
+              <th>Trips</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+      `;
+
+      drivers.forEach(driver => {
+
+        const currentAssignment =
+          allAssignments.find(
+            a =>
+              a.driver_id === driver.id &&
+              !a.end_date &&
+              a.start_date <= today()
+          );
+
+        const vehicle =
+          currentAssignment
+            ? findVehicle(
+                currentAssignment.vehicle_id
+              )
+            : null;
+
+        const tripCount =
+          allTrips.filter(
+            t =>
+              t.driver_id ===
+              driver.id
+          ).length;
+
+        html += `
+          <tr>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  driver.full_name
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                driver.email || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                driver.phone || "-"
+              )}
+            </td>
+
+            <td>
+              ${
+                driver.is_active
+                  ? `<span class="status status-active">ACTIVE</span>`
+                  : `<span class="status status-inactive">INACTIVE</span>`
+              }
+            </td>
+
+            <td>
+              ${escapeHtml(
+                vehicle?.vehicle_number ||
+                "Not assigned"
+              )}
+            </td>
+
+            <td>
+              ${tripCount}
+            </td>
+
+            <td>
+
+              ${
+                driver.is_active
+                  ? `
+                    <button
+                      class="btn btn-red"
+                      onclick="deactivateDriver('${driver.id}')"
+                    >
+                      Deactivate
+                    </button>
+                  `
+                  : `
+                    <button
+                      class="btn btn-green"
+                      onclick="activateDriver('${driver.id}')"
+                    >
+                      Activate
+                    </button>
+                  `
+              }
+
+            </td>
+
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      container.innerHTML =
+        html;
+    }
+
+
+    async function deactivateDriver(
+      driverId
+    ) {
+
+      if (
+        !confirm(
+          "Deactivate this driver? Old trips and salary history will remain."
+        )
+      ) {
+        return;
+      }
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("profiles")
+            .update({
+              is_active: false
+            })
+            .eq(
+              "id",
+              driverId
+            );
+
+        if (error) {
+          throw error;
+        }
+
+        await loadAllData();
+
+      } catch (error) {
+
+        showError(error);
+      }
+    }
+
+
+    async function activateDriver(
+      driverId
+    ) {
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("profiles")
+            .update({
+              is_active: true
+            })
+            .eq(
+              "id",
+              driverId
+            );
+
+        if (error) {
+          throw error;
+        }
+
+        await loadAllData();
+
+      } catch (error) {
+
+        showError(error);
+      }
+    }
+
+
+    /* =========================================================
+       PAYMENTS
+    ========================================================== */
+
+    function renderPayments() {
+
+      const container =
+        $("paymentsTable");
+
+      if (!allPayments.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+            No salary payments found.
+          </div>`;
+
+        return;
+      }
+
+      let html = `
+        <table>
+
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Driver</th>
+              <th>Vehicle</th>
+              <th>Trip</th>
+              <th>Salary</th>
+              <th>Paid</th>
+              <th>Status</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+
+          <tbody>
+      `;
+
+      allPayments.forEach(
+        payment => {
+
+          const driver =
+            findProfile(
+              payment.driver_id
+            );
+
+          const vehicle =
+            findVehicle(
+              payment.vehicle_id
+            );
+
+          const trip =
+            allTrips.find(
+              t =>
+                t.id ===
+                payment.trip_id
+            );
+
+          html += `
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  payment.payment_date || "-"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  driver?.full_name || "-"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  vehicle?.vehicle_number || "-"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  trip?.product || "-"
+                )}
+              </td>
+
+              <td class="money">
+                ${money(
+                  payment.salary_amount
+                )}
+              </td>
+
+              <td class="money">
+                ${money(
+                  payment.paid_amount
+                )}
+              </td>
+
+              <td>
+                ${
+                  payment.status === "paid"
+                    ? `<span class="status status-paid">PAID</span>`
+                    : `<span class="status status-partial">PARTIAL</span>`
+                }
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  payment.payment_note || "-"
+                )}
+              </td>
+
+            </tr>
+          `;
+        }
+      );
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      container.innerHTML =
+        html;
+    }
+
+
+    /* =========================================================
+       VEHICLE HISTORY
+    ========================================================== */
+
+    function populateHistoryVehicleSelect() {
+
+      const select =
+        $("historyVehicleSelect");
+
+      const current =
+        select.value;
+
+      select.innerHTML =
+        `<option value="">
+          Select Vehicle
+        </option>` +
+        allVehicles
+          .map(
+            vehicle =>
+              `<option value="${vehicle.id}">
+                ${escapeHtml(
+                  vehicle.vehicle_number
+                )}
+              </option>`
+          )
+          .join("");
+
+      if (
+        allVehicles.some(
+          v => v.id === current
+        )
+      ) {
+        select.value =
+          current;
+      }
+    }
+
+
+    function selectHistoryVehicle(
+      vehicleId
+    ) {
+
+      showOwnerSection(
+        "history"
+      );
+
+      $("historyVehicleSelect")
+        .value =
+        vehicleId;
+
+      renderVehicleHistory();
+    }
+
+
+    function renderVehicleHistory() {
+
+      const vehicleId =
+        $("historyVehicleSelect")
+          .value;
+
+      const search =
+        (
+          $("historySearch").value ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const container =
+        $("vehicleHistoryResult");
+
+      if (!vehicleId) {
+
+        container.innerHTML =
+          `<div class="empty">
+            Select a vehicle to see complete history.
+          </div>`;
+
+        return;
+      }
+
+      const vehicle =
+        findVehicle(
+          vehicleId
+        );
+
+      let trips =
+        allTrips.filter(
+          t =>
+            t.vehicle_id ===
+            vehicleId
+        );
+
+      if (search) {
+
+        trips =
+          trips.filter(trip => {
+
+            const driver =
+              findProfile(
+                trip.driver_id
+              );
+
+            const text = [
+              driver?.full_name,
+              trip.product,
+              trip.load_from,
+              trip.unload_to
+            ]
+              .join(" ")
+              .toLowerCase();
+
+            return text.includes(
+              search
+            );
+          });
+      }
+
+
+      const drivers =
+        [
+          ...new Set(
+            trips.map(
+              t => t.driver_id
+            )
+          )
+        ]
+          .map(
+            id =>
+              findProfile(id)
+          )
+          .filter(Boolean);
+
+
+      let html = `
+        <div class="calculation-box">
+
+          <div class="calc-line">
+            <span>Vehicle</span>
+            <strong>
+              ${escapeHtml(
+                vehicle?.vehicle_number || "-"
+              )}
+            </strong>
+          </div>
+
+          <div class="calc-line">
+            <span>Total Trips</span>
+            <strong>
+              ${trips.length}
+            </strong>
+          </div>
+
+          <div class="calc-line">
+            <span>Drivers in History</span>
+            <strong>
+              ${drivers.length}
+            </strong>
+          </div>
+
+        </div>
+      `;
+
+
+      if (!trips.length) {
+
+        html +=
+          `<div class="empty">
+            No trip history found.
+          </div>`;
+
+        container.innerHTML =
+          html;
+
+        return;
+      }
+
+
+      html += `
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Driver</th>
+                <th>Product</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Rent</th>
+                <th>Expenses</th>
+                <th>Salary</th>
+                <th>Final Balance</th>
+              </tr>
+            </thead>
+
+            <tbody>
+      `;
+
+
+      trips.forEach(trip => {
+
+        const driver =
+          findProfile(
+            trip.driver_id
+          );
+
+        const expenses =
+          Number(trip.diesel || 0) +
+          Number(trip.toll || 0) +
+          Number(trip.other_expense || 0);
+
+        html += `
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                trip.trip_date || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                driver?.full_name || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.product || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.load_from || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                trip.unload_to || "-"
+              )}
+            </td>
+
+            <td class="money">
+              ${money(
+                trip.trip_rent
+              )}
+            </td>
+
+            <td class="money">
+              ${money(expenses)}
+            </td>
+
+            <td class="money">
+              ${money(
+                trip.driver_salary
+              )}
+            </td>
+
+            <td class="money">
+              ${money(
+                trip.final_balance
+              )}
+            </td>
+
+          </tr>
+        `;
+      });
+
+
+      html += `
+            </tbody>
+
+          </table>
+
+        </div>
+      `;
+
+      container.innerHTML =
+        html;
+    }
+
+
+    /* =========================================================
+       CALCULATION HELPERS
+    ========================================================== */
+
+    function getTripPaidAmount(
+      tripId
+    ) {
+
+      return allPayments
+        .filter(
+          p =>
+            p.trip_id === tripId
+        )
+        .reduce(
+          (
+            total,
+            payment
+          ) =>
+            total +
+            Number(
+              payment.paid_amount || 0
+            ),
+          0
+        );
+    }
+
+
+    function getTripSalaryDue(
+      tripId
+    ) {
+
+      const trip =
+        allTrips.find(
+          t =>
+            t.id === tripId
+        );
+
+      if (!trip) {
+        return 0;
+      }
+
+      const salary =
+        Number(
+          trip.driver_salary || 0
+        );
+
+      const paid =
+        getTripPaidAmount(
+          tripId
+        );
+
+      return Math.max(
+        0,
+        salary - paid
+      );
+    }
+
+
+    function getLatestPayment(
+      tripId
+    ) {
+
+      const payments =
+        allPayments
+          .filter(
+            p =>
+              p.trip_id === tripId
+          )
+          .sort(
+            (a, b) =>
+              new Date(
+                b.payment_date || b.created_at
+              ) -
+              new Date(
+                a.payment_date || a.created_at
+              )
+          );
+
+      return payments[0] || null;
+    }
+
+
+    function findVehicle(
+      vehicleId
+    ) {
+
+      return allVehicles.find(
+        v =>
+          v.id === vehicleId
+      );
+    }
+
+
+    function findProfile(
+      profileId
+    ) {
+
+      return allProfiles.find(
+        p =>
+          p.id === profileId
+      );
+    }
+
+
+    /* =========================================================
+       OWNER NAVIGATION
+    ========================================================== */
+
+    function showOwnerSection(
+      section,
+      clickedButton
+    ) {
+
+      const sections = [
+        "trips",
+        "vehicles",
+        "drivers",
+        "payments",
+        "history"
+      ];
+
+      sections.forEach(
+        name => {
+
+          const element =
+            $("owner" +
+              name.charAt(0).toUpperCase() +
+              name.slice(1) +
+              "Section");
+
+          if (element) {
+            element.classList.add(
+              "hidden"
+            );
+          }
+        }
+      );
+
+
+      let target;
+
+      if (section === "trips") {
+        target =
+          $("ownerTripsSection");
+      }
+
+      if (section === "vehicles") {
+        target =
+          $("ownerVehiclesSection");
+      }
+
+      if (section === "drivers") {
+        target =
+          $("ownerDriversSection");
+      }
+
+      if (section === "payments") {
+        target =
+          $("ownerPaymentsSection");
+      }
+
+      if (section === "history") {
+        target =
+          $("ownerHistorySection");
+      }
+
+      if (target) {
+        target.classList.remove(
+          "hidden"
+        );
+      }
+
+
+      document
+        .querySelectorAll(
+          "#ownerApp .nav-btn"
+        )
+        .forEach(
+          btn =>
+            btn.classList.remove(
+              "active"
+            )
+        );
+
+
+      if (clickedButton) {
+        clickedButton.classList.add(
+          "active"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       DRIVER NAVIGATION
+    ========================================================== */
+
+    function showDriverSection(
+      section,
+      clickedButton
+    ) {
+
+      $("driverTripsSection")
+        .classList.add("hidden");
+
+      $("driverSalarySection")
+        .classList.add("hidden");
+
+      if (section === "trips") {
+
+        $("driverTripsSection")
+          .classList.remove(
+            "hidden"
+          );
+
+      } else {
+
+        $("driverSalarySection")
+          .classList.remove(
+            "hidden"
+          );
+      }
+
+
+      document
+        .querySelectorAll(
+          "#driverApp .nav-btn"
+        )
+        .forEach(
+          btn =>
+            btn.classList.remove(
+              "active"
+            )
+        );
+
+
+      if (clickedButton) {
+        clickedButton.classList.add(
+          "active"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       AUTH STATE
+    ========================================================== */
+
+    supabaseClient.auth
+      .onAuthStateChange(
+        async (
+          event,
+          session
+        ) => {
+
+          if (
+            session &&
+            !currentProfile
+          ) {
+
+            try {
+
+              await loadCurrentUser();
+
+            } catch (error) {
+
+              console.error(error);
+
+            }
+
+          }
+        }
+      );
+
+
+    /* =========================================================
+       INITIAL LOAD
+    ========================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      async () => {
+
+        try {
+
+          $("tripDate").value =
+            today();
+
+          $("assignmentStartDate").value =
+            today();
+
+          $("salaryPaymentDate").value =
+            today();
+
+
+          const {
+            data
+          } =
+            await supabaseClient.auth
+              .getSession();
+
+
+          if (data.session) {
+
+            currentUser =
+              data.session.user;
+
+            await loadCurrentUser();
+
+          }
+
+
+          /*
+            Password recovery:
+            If Supabase redirects here after
+            forgot-password, show new password form.
+          */
+
+          const hash =
+            window.location.hash;
+
+          if (
+            hash.includes(
+              "type=recovery"
+            )
+          ) {
+
+            $("authScreen")
+              .classList.remove(
+                "hidden"
+              );
+
+            $("app")
+              .classList.add(
+                "hidden"
+              );
+
+            $("loginForm")
+              .classList.add(
+                "hidden"
+              );
+
+            $("forgotForm")
+              .classList.add(
+                "hidden"
+              );
+
+            $("resetForm")
+              .classList.remove(
+                "hidden"
+              );
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Initial load error:",
+            error
+          );
+        }
+      }
+    );
+  </script>
+
+</body>
+</html>
